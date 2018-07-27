@@ -198,8 +198,8 @@ h1 {
     font-size: 1.45em;
 }
 
-.home {
-    margin: 0 161px;
+.disabled {
+    opacity: 0.75;
 }
 
 .navcon {
@@ -210,10 +210,12 @@ h1 {
 
 .arrow {
     background-position: -1px -1px;
+    transition: all 0.4s ease;
 }
 
 .circle {
     background-position: -26px -1px;
+    margin: 0 161px;
 }
 
 .box {

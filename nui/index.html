@@ -14,7 +14,7 @@
                 <div class="menu">
                     <h1>Freight Mobile</h1>
                     <ul class="nav">
-                        <li ng-repeat="section in sections" ng-class="{'active': isCurrentSection($index)}" ng-click="changeItem(1, $index)">{{ section }}</li>
+                        <li ng-repeat="section in sections" ng-class="{'active': currentSection == $index}" ng-click="changeView($index, 0)">{{ section }}</li>
                     </ul>
                 </div>
                 <div class="area">
@@ -42,7 +42,7 @@
                         </div>
                         <div class="paging">
                             <ul>
-                                <li ng-repeat="i in [] | range: getJobsPageCount()" ng-class="{'active': isCurrentPage(i)}" ng-click="changeItem(2, i)">&bull;</li>
+                                <li ng-repeat="i in [] | range: getJobsPageCount()" ng-class="{'active': currentPage == i}" ng-click="changeView(currentSection, i)">&bull;</li>
                             </ul>
                         </div>
                     </div>
@@ -52,17 +52,11 @@
                     <div ng-show="currentSection == 2">
                         Auctions Coming Soon
                     </div>
-                    <div>
-                        {{ actionHistory.prevAction.type }} |
-                        {{ actionHistory['prevAction']['value'] }} |
-                        {{ actionHistory['currentAction']['type'] }} |
-                        {{ actionHistory['currentAction']['value'] }}
-                    </div>
                 </div>
                 <div class="bottom-nav">
                     <ul>
-                        <li><div ng-click="back()" class="navcon arrow"></div></li>
-                        <li class="home"><div ng-click="home()" class="navcon circle"></div></li>
+                        <li><div ng-click="back()" ng-class="{'disabled': noHistory}" class="navcon arrow"></div></li>
+                        <li><div ng-click="home()" ng-class="{'disabled': currentSection == 0}" class="navcon circle"></div></li>
                         <li><div ng-click="close()" class="navcon box"></div></li>
                     </ul>
                 </div>
