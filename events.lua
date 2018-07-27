@@ -20,6 +20,7 @@ AddEventHandler("trucking:updatejobs", function(jobs)
 
     data = json.encode(jobs)
     EnableMenu(true, data)
+	cb('ok')
 end)
 
 RegisterNetEvent("trucking:start")

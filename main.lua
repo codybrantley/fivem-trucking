@@ -53,6 +53,7 @@ deliveryReport    = {}
 pickupPoints = {
 	{loc="PostOP Storage, Unit D5", x=1190.601, y=-3333.389, z=5.63, h=180.65, t=4, l=3, w=18543},
     {loc="Food Production, Loading Dock", x=951.7336, y=-2106.869, z=30.07, h=91.07, t=4, l=1, w=13831},
+
     {loc="Grapeseed Tree Farm", x=2552.92, y=4675.199, z=33.89, h=10.74, t=7, l=1, w=15249},
     {loc="Some place", x=1302.72, y=4305.66, z=37.252, h=303.75, t=2, l=1, w=12432}
 }
@@ -60,18 +61,20 @@ pickupPoints = {
 deliveryPoints = {
 	{x=2673.49, y=3517.10, z=54.54, h=337.22, l1={x=2670.44, y=3514.035, z=51.78}, l2={x=2673.50, y=3512.73, z=51.78}, l3={x=2676.617, y=3520.365, z=51.78}, l4={x=2673.55, y=3521.71, z=51.78}, t=1}, -- Grand Senora YouTool
     {x=1726.707, y=4793.88, z=43.61, h=56.6, l1={x=1729.818, y=4789.85, z=40.93}, l2={x=1731.897, y=4792.941, z=40.84}, l3={x=1724.093, y=4797.619, z=40.84}, l4={x=1722.084, y=4794.811, z=40.93}, t=2}, -- Grapeseed Supermarket
+
     {x=-591.103, y=5363.464, z=70.29, h=164.5, l1={x=-588.0181, y=5368.581, z=69.7}, l2={x=-591.173, y=5369.562, z=69.8}, l3={x=-594.56, y=5358.035, z=69.5}, l4={x=-591.13, y=5357.05, z=69.5}, t=5}, -- Paleto Lumber Mill
+
 	{x=587.91, y=2791.616, z=43.96, h=4.2, l1={x=586.54, y=2785.7, z=41.2}, l2={x=590.06, y=2785.92, z=41.2}, l3={x=589.63, y=2793.76, z=41.2}, l4={x=586.31, y=2793.54, z=41.2}, t=3}, -- Harmony Dollar Pills
 	{x=938.7413, y=-1244.577, z=27.44, h=33.36, l1={x=940.47, y=-1249.91, z=24.7}, l2={x=943.03, y=-1248.14, z=24.7}, l3={x=938.98, y=-1241.79, z=24.7}, l4={x=936.15, y=-1243.69, z=24.7}, t=3}, -- La Mesa Self-Storage
 	{x=873.8079, y=-2194.765, z=32.31, h=355.55, l1={x=871.90, y=-2199.9, z=29.55}, l2={x=875.12, y=-2200.14, z=29.55}, l3={x=875.65, y=-2192.75, z=29.55}, l4={x=872.35, y=-2192.45, z=29.55}, t=3} -- Dry Dock Facility
 }
 
 message = {
-	onduty = "You are now on duty. Check your ~y~Freight Mobile~w~ for delivery jobs.",
+	onduty = "You are now on duty. Check your ~y~handheld~w~ for delivery jobs.",
 	offduty = "You are now off duty, and will no longer receive alerts.",
-	auctionavail = "A new ~r~uShip Auction~w~ is available, check your ~y~Trucker Menu~w~ to join.",
+	auctionavail = "A new ~r~auction~w~ is available, check your ~y~handheld~w~ to bid.",
 	jobinfo = "~y~Attempting Dropoff~n~~w~Distance: %s~n~Angle: %s~n~Trailer Condition: %s",
-	jobstart = "Your trailer is located at ~y~%s~w~. GPS location set.",
+	jobstart = "The pickup is located at ~y~%s~w~. GPS location set.",
 	jobdeli = "Trailer picked up. Dropoff location set on GPS.",
 	jobunload = "Evaluating performance and unloading cargo...",
 	jobdone = "Delivery completed. You received ~g~$%d~w~, check your ~y~handheld~w~ for a full delivery report.",
@@ -123,21 +126,12 @@ end
 function getAngleStatus(heading, setHeading)
 	fHeading = math.floor(heading)
     fSetHeading = math.floor(setHeading)
-	if (fHeading >= setdeg(fSetHeading - 1) and fHeading <= setdeg(fSetHeading + 1)) then
-		return status[1]
-	elseif (fHeading >= setdeg(fSetHeading - 2) and fHeading <= setdeg(fSetHeading + 2)) then
-		return status[2]
-	elseif (fHeading >= setdeg(fSetHeading - 3) and fHeading <= setdeg(fSetHeading + 3)) then
-		return status[3]
-	elseif (fHeading >= setdeg(fSetHeading - 4) and fHeading <= setdeg(fSetHeading + 4)) then
-		return status[4]
-	elseif (fHeading >= setdeg(fSetHeading - 5) and fHeading <= setdeg(fSetHeading + 5)) then
-		return status[5]
-	elseif (fHeading >= setdeg(fSetHeading - 6) and fHeading <= setdeg(fSetHeading + 6)) then
-		return status[6]
-	else
-		return status[8]
-	end
+    for i=1,6 do
+        if (fHeading >= setdeg(fSetHeading - i) and fHeading <= setdeg(fSetHeading + i)) then
+            return status[i]
+        end
+    end
+	return status[8]
 end
 
 function getDistanceStatus(distance)
@@ -272,6 +266,12 @@ function calculateWeight(wt)
 end
 
 function EnableMenu(enable, data)
+    SendNUIMessage({
+        type = "enableui",
+        enable = enable,
+        jobs = data
+    })
+
     SetNuiFocus(enable, enable)
     guiEnabled = enable
 
@@ -281,12 +281,6 @@ function EnableMenu(enable, data)
         StartScreenEffect('SwitchHUDOut', 0, false)
         StopAllScreenEffects()
     end
-
-    SendNUIMessage({
-        type = "enableui",
-        enable = enable,
-        jobs = data
-    })
 end
 
 function EnableGui(enable)

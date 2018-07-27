@@ -12,6 +12,10 @@ body {
     font-family: 'Roboto', sans-serif;
     overflow: hidden;
     display: block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 ul {
@@ -52,14 +56,6 @@ li {
     color: #FFF;
     padding: 35px;
     padding-top: 0;
-}
-
-.area > div {
-    display: none;
-}
-
-.area > div.active {
-    display: block;
 }
 
 .menu {
