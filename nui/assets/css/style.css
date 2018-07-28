@@ -76,7 +76,7 @@ h1 {
 }
 
 .nav {
-    font-size: 1.2em;
+    font-size: 1.265em;
 }
 
 .nav li {
@@ -208,9 +208,51 @@ h1 {
     background: url('../images/nav.png');
 }
 
+.tooltip {
+    position: relative;
+    display: block;
+    opacity: 0;
+    top: -71px;
+    left: -72px;
+    padding: 7px 10px;
+    width: 111px;
+    background-color: #1e1e1e;
+    font-size: 0.85em;
+    text-align: center;
+    transition: all 0.35s ease;
+}
+
+.tooltip:after {
+    top: 100%;
+    left: 81%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #1e1e1e;
+    border-width: 15px;
+    margin-left: -17px;
+}
+
+.warning:hover .tooltip {
+    opacity: 1;
+}
+
+.arrow, .circle {
+    transition: all 0.4s ease;
+}
+
+.play, .warning {
+    float: right;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
 .arrow {
     background-position: -1px -1px;
-    transition: all 0.4s ease;
 }
 
 .circle {
@@ -234,11 +276,6 @@ h1 {
     width: 32px;
     height: 32px;
     background-position: -1px -182px;
-    float: right;
-    margin-top: 10px;
-    margin-right: 5px;
-    color: #66CC99;
-    font-size: 1.4em;
 }
 
 .cluckinbell {
@@ -348,6 +385,12 @@ h1 {
     width: 32px;
     height: 32px;
     background-position: -137px -182px;
+}
+
+.warning {
+    width: 32px;
+    height: 32px;
+    background-position: -169px -179px;
 }
 
 .alert {

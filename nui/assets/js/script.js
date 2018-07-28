@@ -5,6 +5,7 @@ angular.module('app', [])
     $rootScope.menu = false;
     $rootScope.sections = ['Market', 'Deliveries', 'Auctions']
     $rootScope.jobs = [];
+    $rootScope.onjob = false;
     $scope.currentSection = 0;
     $scope.currentPage = 0;
     $scope.jobsPerPage = 3;
@@ -82,10 +83,16 @@ angular.module('app', [])
 })
 .service('receiver', function($rootScope) {
     $rootScope.$on('update', function(event, args) {
-        var enabled = args.enable ? true : false;
-        $rootScope.menu = enabled;
-        if(enabled) {
-            $rootScope.jobs = angular.fromJson(args.jobs);
+        switch (args.type) {
+            case "enable":
+                $rootScope.menu = args.data ? true : false;
+                break;
+            case "jobs":
+                $rootScope.jobs = angular.fromJson(args.data);
+                break;
+            case "job_status":
+                $rootScope.onjob = args.data ? true : false;
+                break;
         }
         $rootScope.$apply();
     });

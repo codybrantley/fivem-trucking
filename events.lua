@@ -9,9 +9,9 @@ AddEventHandler("trucking:updatejobs", function(jobs)
     coords = GetEntityCoords(player)
     for i, job in pairs(jobs) do
       distance = GetDistanceBetweenCoords(job.pickup_x, job.pickup_y, job.pickup_z, coords.x, coords.y, coords.z, 1)
-	  milesAway = round(distance / 1760)
-	  milesTravel = round(GetDistanceBetweenCoords(job.pickup_x, job.pickup_y, job.pickup_z, job.delivery_x, job.delivery_y, job.delivery_z, 1) / 1760)
-      payout = milesTravel * (basepay + (calculateWeight(job.pickup_w) * basepay))
+	  milesAway = Round(distance / 1760)
+	  milesTravel = Round(GetDistanceBetweenCoords(job.pickup_x, job.pickup_y, job.pickup_z, job.delivery_x, job.delivery_y, job.delivery_z, 1) / 1760)
+      payout = milesTravel * (basepay + (CalculateWeight(job.pickup_w) * basepay))
       jobs[i].distance = distance
       jobs[i].milesAway = milesAway
 	  jobs[i].milesTravel = milesTravel
@@ -19,7 +19,8 @@ AddEventHandler("trucking:updatejobs", function(jobs)
     end
 
     data = json.encode(jobs)
-    EnableMenu(true, data)
+	SendMobileMessage("jobs", data)
+	ShowMenu(true)
 	cb('ok')
 end)
 
@@ -37,7 +38,7 @@ end)
 RegisterNetEvent("trucking:job")
 AddEventHandler("trucking:job", function()
 	distance = round(GetDistanceBetweenCoords(job.pickup_x, job.pickup_y, job.pickup_z, job.delivery_x, job.delivery_y, job.delivery_z, 1) / 1760)
-	payout = distance * (basepay + (calculateWeight(job.pickup_w) * basepay))
+	payout = distance * (basepay + (CalculateWeight(job.pickup_w) * basepay))
 	originalPayout = payout
 	startTime = GetGameTimer()
 	latestTime = startTime + 600000
@@ -45,7 +46,7 @@ AddEventHandler("trucking:job", function()
 	SetVehicleLivery(trailer, job.pickup_l)
 	SetVehicleOnGroundProperly(trailer)
 	SetNewWaypoint(job.pickup_x, job.pickup_y)
-	onjob = true
+	SetOnJob(true)
 end)
 
 RegisterNetEvent("trucking:updatejob")
@@ -55,7 +56,7 @@ AddEventHandler("trucking:updatejob", function(data)
 		local str = string.format(message.jobstart, job.pickup_loc)
    		Notify(str)
    		TriggerEvent("trucking:job")
-		EnableMenu(false, false)
+		ShowMenu(false)
    	else
    		Notify(message.jobunavail)
    	end
@@ -77,7 +78,6 @@ RegisterNUICallback('job', function(data, cb)
 end)
 
 RegisterNUICallback('escape', function(data, cb)
-	EnableMenu(false, false)
-    EnableGui(false)
+	ShowMenu(false)
     cb('ok')
 end)

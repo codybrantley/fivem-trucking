@@ -1,6 +1,5 @@
 <html ng-app="app" ng-controller="mainController as main" ng-show="menu" ng-cloak>
     <head>
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
         <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
         <script src="./assets/js/angular.min.js" type="text/javascript"></script>
         <script src="./assets/js/script.js?v=1.8" type="text/javascript"></script>
@@ -34,7 +33,7 @@
                                             <span class="expected">Weight: <b>{{ job.pickup_w | number: 0 }} lb</b></span><br />
                                             <span class="expires">{{ setAdjuncts(job.milesAway) }}</span>
                                         </div>
-                                        <div class="icon play" aria-hidden="true" ng-click="startJob(job.id)"></div>
+                                        <div class="icon" ng-class={'play': onjob == false, 'warning': onjob} aria-hidden="true" ng-click="startJob(job.id)"><span class="tooltip" ng-show="onjob">You're already on a job</span></div>
                                         <div class="offerAmount"><span class="orange" id="payout">${{ job.payout | number: 0 }}</span><br />${{ job.payout / job.milesTravel }}/mi</div>
                                     </div>
                                 </div>

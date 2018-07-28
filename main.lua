@@ -109,11 +109,11 @@ function Notify(text)
 	DrawNotification(false, false)
 end
 
-function round(x)
+function Round(x)
   	return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)
 end
 
-function setdeg(x)
+function SetDeg(x)
 	if (x < 0) then
 		return x + 360
 	elseif (x >= 360) then
@@ -123,19 +123,24 @@ function setdeg(x)
 	end
 end
 
-function getAngleStatus(heading, setHeading)
+function SetOnJob(status)
+    SendMobileMessage("job_status", status)
+    onjob = status
+end
+
+function GetAngleStatus(heading, setHeading)
 	fHeading = math.floor(heading)
     fSetHeading = math.floor(setHeading)
     for i=1,6 do
-        if (fHeading >= setdeg(fSetHeading - i) and fHeading <= setdeg(fSetHeading + i)) then
+        if (fHeading >= SetDeg(fSetHeading - i) and fHeading <= SetDeg(fSetHeading + i)) then
             return status[i]
         end
     end
 	return status[8]
 end
 
-function getDistanceStatus(distance)
-	num = round(0.8 / distance * 100)
+function GetDistanceStatus(distance)
+	num = Round(0.8 / distance * 100)
 	if (num >= 100) then
 		return status[1]
 	elseif (num <= 99 and num >= 97) then
@@ -153,7 +158,7 @@ function getDistanceStatus(distance)
 	end
 end
 
-function getTrailerStatus(hp)
+function GetTrailerStatus(hp)
 	if (hp == 1000) then
 		return status[1]
 	elseif (hp <= 999 and hp >= 899) then
@@ -171,13 +176,13 @@ function getTrailerStatus(hp)
 	end
 end
 
-function acceptStatus(status)
+function AcceptStatus(status)
 	if (status ~= "---" and "Destroyed") then
 		return true
 	end
 end
 
-function adjustPayout(ds, as, ts, dt)
+function AdjustPayout(ds, as, ts, dt)
 	-- Deductions
 	if (ds == "Ideal" or ds == "Acceptable") then
 		dp = 0.05
@@ -211,10 +216,10 @@ function adjustPayout(ds, as, ts, dt)
 	else
 		dlp = 0
 	end
-	distanceDeduction = round(payout * dp)
-	angleDeduction = round(payout * ap)
-	trailerDeduction = round(payout * tp)
-	timeDeduction = round(payout * dlp)
+	distanceDeduction = Round(payout * dp)
+	angleDeduction = Round(payout * ap)
+	trailerDeduction = Round(payout * tp)
+	timeDeduction = Round(payout * dlp)
 	deduct = distanceDeduction + angleDeduction + trailerDeduction + timeDeduction
 	payout = payout - deduct
 	-- Bonuses
@@ -237,13 +242,13 @@ function adjustPayout(ds, as, ts, dt)
 	else
 		wp = 0
 	end
-	timeBonus = round(payout * bp)
-	weatherBonus = round(payout * wp)
+	timeBonus = Round(payout * bp)
+	weatherBonus = Round(payout * wp)
 	bonus = timeBonus + weatherBonus
 	payout = payout + bonus
 end
 
-function drawDropoffLines(r, g, b)
+function DrawDropoffLines(r, g, b)
 	DrawMarker(3, job.delivery_x, job.delivery_y, job.delivery_z+3.9, 0.0, 0.0, 0.0, 180.0, 0.0, 0.0, 0.75, 0.75, 0.75, r, g, b, 150, false, true, 2, false, false, false, false) -- Chevron
     DrawLine(job.delivery_l1_x, job.delivery_l1_y, job.delivery_l1_z, job.delivery_l2_x, job.delivery_l2_y, job.delivery_l2_z, r, g, b, 150) -- Back
     DrawLine(job.delivery_l2_x, job.delivery_l2_y, job.delivery_l2_z, job.delivery_l3_x, job.delivery_l3_y, job.delivery_l3_z, r, g, b, 150) -- Left
@@ -253,7 +258,7 @@ function drawDropoffLines(r, g, b)
     DrawLine(job.delivery_l2_x, job.delivery_l2_y, job.delivery_l2_z, job.delivery_l4_x, job.delivery_l4_y, job.delivery_l4_z, r, g, b, 150) -- Cross Right
 end
 
-function calculateWeight(wt)
+function CalculateWeight(wt)
 	if (wt <= 0 and wt >= 10000) then
 		return 0.1
 	elseif (wt <= 10001 and wt >= 15000) then
@@ -265,17 +270,17 @@ function calculateWeight(wt)
 	end
 end
 
-function EnableMenu(enable, data)
-    SendNUIMessage({
-        type = "enableui",
-        enable = enable,
-        jobs = data
-    })
+function LoadMenu()
+    TriggerEvent("trucking:getjobs")
+end
 
-    SetNuiFocus(enable, enable)
-    guiEnabled = enable
+function ShowMenu(status)
+    SendMobileMessage("enable", status)
 
-    if(enable) then
+    SetNuiFocus(status, status)
+    guiEnabled = status
+
+    if(status) then
         StartScreenEffect('SwitchHUDIn', 0, false)
     else
         StartScreenEffect('SwitchHUDOut', 0, false)
@@ -283,13 +288,11 @@ function EnableMenu(enable, data)
     end
 end
 
-function EnableGui(enable)
-    if enable then
-        TriggerEvent("trucking:getjobs")
-    else
-        SetNuiFocus(false)
-        guiEnabled = false
-    end
+function SendMobileMessage(type, data)
+    SendNUIMessage({
+        type = type,
+        data = data
+    })
 end
 
 Citizen.CreateThread(function()
@@ -343,11 +346,7 @@ Citizen.CreateThread(function()
 
         -- Mobile Menu [M]
         if IsControlJustPressed(1, 244) then
-        	if guiEnabled then
-	            EnableGui(false)
-	        else
-	        	EnableGui(true)
-	        end
+        	LoadMenu()
         end
 
         -- Dropoff Trailer [L]
@@ -369,7 +368,7 @@ Citizen.CreateThread(function()
 
         function drawLine()
 			if(showLines) then
-				drawDropoffLines(255, 255, 0)
+				DrawDropoffLines(255, 255, 0)
 			end
 		end
 

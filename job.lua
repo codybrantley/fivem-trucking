@@ -18,19 +18,19 @@ Citizen.CreateThread(function()
 		if (mission == 2) then
 			trailerCoords = GetEntityCoords(trailer)
 			trailerHeading = GetEntityHeading(trailer)
-			trailerHealth = getTrailerStatus(GetEntityHealth(trailer))
+			trailerHealth = GetTrailerStatus(GetEntityHealth(trailer))
 			distance = GetDistanceBetweenCoords(trailerCoords, job.delivery_x, job.delivery_y, job.delivery_z, false)
-			drawDropoffLines(255, 255, 0)
+			DrawDropoffLines(255, 255, 0)
 			-- Attempt Dropoff
 			if (distance < 15) then
-				distanceStatus = getDistanceStatus(distance)
-				angleStatus = getAngleStatus(trailerHeading, job.delivery_h)
+				distanceStatus = GetDistanceStatus(distance)
+				angleStatus = GetAngleStatus(trailerHeading, job.delivery_h)
 				local str = string.format(message.jobinfo, distanceStatus, angleStatus, trailerHealth)
 				DrawTxt(0.87, 0.05, 0.068, -1.18, 0.33, str, 255, 255, 255, 255)
 				DrawRect(0.91, 0.715, 0.175, 0.16, 0, 0, 0, 150)
-				if (acceptStatus(distanceStatus) and acceptStatus(angleStatus)) then
-					drawDropoffLines(0, 255, 0)
-					drawTxt(0.87, 0.16, 0.068, -1.18, 0.33, "Press ~y~L~w~ to dropoff trailer", 255, 255, 255, 255)
+				if (AcceptStatus(distanceStatus) and AcceptStatus(angleStatus)) then
+					DrawDropoffLines(0, 255, 0)
+					DrawTxt(0.87, 0.16, 0.068, -1.18, 0.33, "Press ~y~L~w~ to dropoff trailer", 255, 255, 255, 255)
 					dropoff = true
 				else
 					dropoff = false
@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
 		-- Dropoff
 		if (mission == 3) then
 			deliveryTime = GetGameTimer()
-			adjustPayout(distanceStatus, angleStatus, trailerHealth, deliveryTime)
+			AdjustPayout(distanceStatus, angleStatus, trailerHealth, deliveryTime)
 			Notify(message.jobunload)
 			Wait(11000)
 			DeleteEntity(trailer)
