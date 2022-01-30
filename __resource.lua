@@ -1,27 +1,21 @@
-resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
+resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
 client_scripts {
-	'main.lua',
-	'job.lua',
-	'events.lua'
+	'client/global.js',
+	'client/events.js',
+	'client/thread.js'
 }
 
-server_scripts {
-	'@mysql-async/lib/MySQL.lua',
-	'server.lua'
-}
+server_script 'server/server.lua'
 
-ui_page('nui/index.html')
+ui_page('client/nui/mobile.html')
 
 files({
-    'nui/index.html',
-	'nui/assets/js/angular.min.js',
-    'nui/assets/js/script.js',
-	'nui/assets/css/foundation.min.css',
-    'nui/assets/css/style.css',
-    'nui/assets/images/icons.png',
-	'nui/assets/images/nav.png',
-	'nui/assets/images/map.jpg',
-	'nui/assets/fonts/RobotoSlab-Bold.ttf',
-	'nui/assets/fonts/Roboto-Thin.ttf'
+    'client/nui/mobile.html',
+    'client/nui/mobile.js',
+    'client/nui/mobile.css',
+    'client/nui/includes/images/icons.png',
+	'client/nui/includes/images/map.jpg',
+	'client/nui/includes/fonts/RobotoSlab-Bold.ttf',
+	'client/nui/includes/fonts/Roboto-Thin.ttf'
 })
