@@ -1,0 +1,195 @@
+<html ng-app="app" ng-controller="mainController as main" ng-cloak>
+
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <!-- <script src="nui://game/ui/jquery.js" type="text/javascript"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    <script src="./assets/js/local-script.js" type="text/javascript"></script>
+    <link href="./assets/css/foundation.min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/style.css" rel="stylesheet" type="text/css" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+
+<body style="background: transparent;">
+    <div class="dialog">
+        <div class="container">
+            <div class="menu">
+                <h1>Freight Mobile</h1>
+                <ul class="nav">
+                    <li ng-repeat="section in sections" ng-class="{'active': currentSection == $index}" ng-click="changeView($index, 0)">{{ section }}</li>
+                </ul>
+            </div>
+            <div class="area">
+                <div ng-show="currentSection == 0">
+                    <div ng-repeat="job in jobs | startFrom: currentPage * itemsPerPage | limitTo: itemsPerPage" class="row item collapse">
+                        <div class="large-12 columns">
+                            <div class="info">
+                                <div class="trailer">
+                                    <div class="trip">
+                                        <span class="trailerType"><span class="orange">{{ job.type }}</span></span>
+                                        <span class="destination">{{ job.destination_from }} ↝ {{ job.destination_to }}</span>
+                                    </div>
+                                    <div class="icon logo" ng-class="job.company_affilate"></div>
+                                </div>
+                                <div class="offer">
+                                    <div class="text">
+                                        <span class="expected">Weight: <b>{{ job.pickup_w | number: 0 }} lb</b></span><br />
+                                        <span class="expires">{{ setAdjuncts(job.milesAway) }}</span>
+                                    </div>
+                                    <div class="icon" ng-class="onjob ? 'warning' : 'play'" aria-hidden="true" ng-click="startJob(job.id)"><span class="tooltip" ng-if="onjob">You're already on a job</span></div>
+                                    <div class="offerAmount"><span class="orange" id="payout">${{ job.payout | number: 0 }}</span><br />${{ job.payout / job.milesTravel }}/mi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paging">
+                        <ul>
+                            <li ng-repeat="i in [] | range: getPageCount(jobs)" ng-class="{'active': currentPage == i}" ng-click="changeView(currentSection, i)">&bull;</li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-show="currentSection == 1">
+                    <div ng-if="currentPage != 'detail'">
+                        <div ng-if="deliveries.length == 0">
+                            No deliveries today.
+                        </div>
+                        <div ng-if="deliveries.length > 0">
+                            <div ng-repeat="delivery in deliveries | startFrom: currentPage * itemsPerPage | limitTo: itemsPerPage" class="row item delivery collapse">
+                                <div class="large-12 columns">
+                                    <div class="info">
+                                        <div class="trailer">
+                                            <div class="trip">
+                                                <span class="trailerType"><span class="orange">{{ delivery.type }}</span></span>
+                                                <span class="destination">{{ delivery.destination_from }} ↝ {{ delivery.destination_to }}</span>
+                                            </div>
+                                            <div class="icon logo" ng-class="delivery.company_affilate"></div>
+                                        </div>
+                                        <div class="offer">
+                                            <div class="text">
+                                                <span class="expected notice">Delivered<br /><b>{{ parseDay(delivery.date.day) }}, {{ delivery.date.hours | leading}}:{{ delivery.date.minutes | leading}}</b></span>
+                                                <span class="expected notice">Payout<br /><b>${{ delivery.finalPay | number: 0 }}</b></span>
+                                                <span class="expected notice link" ng-click="showDetails($index)">More Details</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="paging">
+                                <ul>
+                                    <li ng-repeat="i in [] | range: getPageCount(deliveries)" ng-class="{'active': currentPage == i}" ng-click="changeView(currentSection, i)">&bull;</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="currentPage == 'detail'">
+                        <div class="row item delivery collapse">
+                            <div class="large-12 columns">
+                                <div class="info">
+                                    <div class="trailer">
+                                        <div class="trip">
+                                            <span class="trailerType"><span class="orange">{{ deliveries[index].type }}</span></span>
+                                            <span class="destination">{{ deliveries[index].destination_from }} ↝ {{ deliveries[index].destination_to }}</span>
+                                        </div>
+                                        <div class="icon logo" ng-class="deliveries[index].company_affilate"></div>
+                                    </div>
+                                    <div class="offer">
+                                        <div class="text width">
+                                            <table class="deliveryReport">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="40%">Item</th>
+                                                        <th>Value</th>
+                                                        <th>Change</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Delivery Distance</td>
+                                                        <td>{{ deliveries[index].distanceCondition }}</td>
+                                                        <td>{{ deliveries[index].distanceDeduction }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Delivery Angle</td>
+                                                        <td>{{ deliveries[index].angleCondition }}</td>
+                                                        <td>{{ deliveries[index].angleDeduction }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Trailer Condition</td>
+                                                        <td>{{ deliveries[index].trailerCondition }}</td>
+                                                        <td>{{ deliveries[index].trailerDeduction }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Time Delivered</td>
+                                                        <td>{{ deliveries[index].timeDelivered }}</td>
+                                                        <td>{{ deliveries[index].timeDeduction }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Weather Condition</td>
+                                                        <td>{{ deliveries[index].weatherStatus }}</td>
+                                                        <td>{{ deliveries[index].weatherBonus }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <span class="expected notice link" ng-click="back()">Back</span>
+                                            <div class="totals">
+                                                <div>Subtotal &nbsp; ${{ deliveries[index].originalPay | number: 0 }}</div>
+                                                <div>Deductions &nbsp; -${{ deliveries[index].totalDeductions | number: 0 }}</div>
+                                                <div>Bonuses &nbsp; ${{ deliveries[index].totalBonus | number: 0 }}</div>
+                                                <div>Total &nbsp; <span class="final">${{ deliveries[index].finalPay | number: 0 }}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="currentSection == 2">
+                    <div ng-if="auction.active == false">
+                        <div class="message">No current auction.</div>
+                    </div>
+                    <div class="row item auction collapse" ng-if="auction.active == true">
+                        <div class="large-12 columns">
+                            <div class="info">
+                                <div class="trailer">
+                                    <div class="trip">
+                                        <span class="trailerType"><span class="orange">{{ auction.type }}</span></span>
+                                        <span class="destination">{{ auction.destination_from }} ↝ {{ auction.destination_to }}</span>
+                                    </div>
+                                    <div class="icon logo postop"></div>
+                                </div>
+                                <div class="offer">
+                                    <div class="text">
+                                        <span class="expected notice">${{ auction.currentBid | number }}</span>
+                                    </div>
+                                    <div class="bidBox">
+                                        <input ng-model="bid" type="number" min="100" max="{{ auction.currentBid - 100 }}"/>
+                                        <button ng-click="addBid(bid)">Bid</button>
+                                    </div>
+                                    <div class="timeBar"><div class="timer"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <ul>
+                    <li>
+                        <div ng-click="back()" ng-class="{'disabled': noHistory}" class="icon arrow"></div>
+                    </li>
+                    <li>
+                        <div ng-click="home()" ng-class="{'disabled': currentSection == 0}" class="icon circle"></div>
+                    </li>
+                    <li>
+                        <div ng-click="close()" class="icon box"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

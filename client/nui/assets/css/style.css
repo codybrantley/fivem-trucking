@@ -1,0 +1,542 @@
+@font-face {
+    font-family: 'Roboto Slab';
+    src: url('../fonts/RobotoSlab-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto-Thin.ttf');
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    display: block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+    text-align: center;
+}
+
+li {
+    display: inline-block;
+}
+
+.dialog {
+    position: absolute;
+    top: 13%;
+    left: 50%;
+    width: 19%;
+    height: 765px;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    background: url('../images/map.jpg') -121px -32px #333;
+    background-size: cover;
+    -webkit-box-shadow: 0px 0px 141px 2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 141px 2px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 141px 2px rgba(0,0,0,0.75);
+}
+
+.titleBar {
+    text-align: right;
+    font-size: 1.2em;
+}
+
+.titleBar, .area {
+    opacity: 0.95;
+}
+
+.area {
+    color: #FFF;
+    padding: 35px;
+    padding-top: 0;
+}
+
+.menu {
+    color: #FFF;
+    padding: 35px 0 10px 0;
+}
+
+h1,.nav {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+h1 {
+    font-family: 'Roboto Slab', sans-serif;
+    margin-top: -25px;
+    margin-bottom: 7px;
+    font-size: 3.056em;
+}
+
+.nav {
+    font-size: 1.265em;
+}
+
+.nav li {
+    margin: 0 34px;
+    color: #d8d8d8;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+}
+
+.nav li.active {
+    color: #FFF;
+    border-bottom: 2px solid #FABE58;
+}
+
+.message {
+    background-color: #FFFFFF;
+    color: #333;
+    padding: 30px 10px;
+    border-radius: 3px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.item {
+    border-left: 6px solid #FABE58;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.item.delivery {
+    border-left-color: #CCC;
+}
+
+.trailer span {
+    display: block;
+    margin: 5px 0;
+}
+
+.orange {
+    color: #01475f;
+    font-family: 'Roboto Slab', sans-serif;
+}
+
+.trailer {
+    padding: 5px 15px;
+    background-color: #f9f9f9;
+}
+
+.trailer > div {
+    display: inline-block;
+}
+
+.trailer .trailerType {
+    font-size: 1.53em;
+}
+
+.trailer .destination {
+    font-weight: 100;
+    margin-top: -5px;
+    color: #333;
+}
+
+.logo {
+    float: right;
+}
+
+.offer {
+    padding: 13px 15px;
+    background-color: #eee;
+}
+
+.offer > div {
+    display: inline-block;
+}
+
+.offer > .text {
+    margin: 2px 0;
+    color: #333;
+    font-weight: 100;
+}
+
+.offer > .text b {
+    color: #666;
+}
+
+.offer .notice {
+    display: inline-block;
+    margin-right: 34px;
+}
+
+.offer .notice.link {
+    background-color: #FABE58;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+.offerAmount {
+    float: right;
+    background-color: #e2e2e2;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    padding: 0 10px;
+    margin-left: 27px;
+    margin-right: 19px;
+}
+
+.paging {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-height: 35px;
+}
+
+.paging li {
+    font-size: 4.5em;
+    line-height: 0;
+    vertical-align: middle;
+    color: #bababa;
+}
+
+.paging li.active {
+    color: #fff;
+}
+
+/* Delivery */
+
+.deliveryReport {
+  width: 100%;
+  background-color: #e5e5e5;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+}
+
+.deliveryReport tr {
+    text-align: left;
+}
+
+.deliveryReport td {
+  padding: 2px 0;
+}
+
+.totals {
+  display: block;
+  width: 100%;
+  float: right;
+  text-align: right;
+}
+
+.totals .final {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: green;
+}
+
+.width {
+  width: 100%;
+}
+
+/* Auctions */
+
+.auction {
+    position: relative;
+    border-color: #e8e8e8;
+}
+
+.auction .offer {
+    height: 424px;
+}
+
+.bidBox {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+}
+
+.bidBox input,
+.bidBox button {
+    display: inline-block;
+}
+
+.bidBox input {
+    width: 100px;
+}
+
+.bidBox button {
+    padding: 12px 17px;
+    background-color: #f15a22;
+    color: #ffffff;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.bidBox button:hover {
+
+}
+
+.timeBar {
+    width: 99.6012%;
+    height: 20px;
+    background-color: #ccc;
+    position: absolute;
+    bottom: 0;
+    left: 1px;
+}
+
+.timer {
+    width: 100%;
+    height: 100%;
+}
+
+.timer.active {
+    animation:loadbar 300s;
+    -webkit-animation:loadbar 300s;
+}
+
+@keyframes loadbar {
+  0% {
+      width: 100%;
+      background-color: #f4d03f;
+  }
+  25% {
+      background-color: #fcb941;
+  }
+  70% {
+      background-color: #ec644b;
+  }
+  85% {
+      background-color: #d91e18;
+  }
+  100% {
+      width: 0%;
+  }
+}
+
+/* Footer */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #1e1e1e;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.bottom-nav ul {
+    padding: 13px 0;
+}
+
+.bottom-nav li {
+    color: #FFF;
+    font-size: 1.45em;
+}
+
+.disabled {
+    opacity: 0.75;
+}
+
+.tooltip {
+    position: relative;
+    display: block;
+    opacity: 0;
+    top: -71px;
+    left: -72px;
+    padding: 7px 10px;
+    width: 111px;
+    background-color: #1e1e1e;
+    font-size: 0.85em;
+    text-align: center;
+    transition: all 0.35s ease;
+}
+
+.tooltip:after {
+    top: 100%;
+    left: 81%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #1e1e1e;
+    border-width: 15px;
+    margin-left: -17px;
+}
+
+.warning:hover .tooltip {
+    opacity: 1;
+}
+
+.arrow, .circle {
+    transition: all 0.4s ease;
+}
+
+.play, .warning {
+    float: right;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+.arrow, .circle, .box {
+    width: 23px;
+    height: 23px;
+}
+
+.arrow {
+    background-position: 53px 93px !important;
+}
+
+.circle {
+    background-position: 30px 93px !important;
+    margin: 0 161px;
+}
+
+.box {
+    background-position: 58px 67px !important;
+}
+
+.icon {
+    background: url('../images/icons.png');
+}
+
+.logo {
+    float: right;
+}
+
+.play {
+    width: 32px;
+    height: 32px;
+    background-position: -1px -182px;
+}
+
+.cluckinbell {
+    width: 50px;
+    height: 52px;
+    background-position: -165px -1px;
+}
+
+.dollar_pills {
+    width: 120px;
+    height: 23px;
+    background-position: -1px -110px;
+    margin-right: -1px;
+    margin-top: 22px;
+}
+
+.flag_green {
+    width: 32px;
+    height: 32px;
+    background-position: -35px -182px;
+}
+
+.flag_red {
+    width: 32px;
+    height: 32px;
+    background-position: -48px -135px;
+}
+
+.flag_yellow {
+    width: 32px;
+    height: 32px;
+    background-position: -150px -135px;
+}
+
+.globeoil {
+    width: 45px;
+    height: 45px;
+    background-position: -1px -135px;
+}
+
+
+.gopostal {
+    width: 45px;
+    height: 47px;
+    margin-top: 6px;
+    background-position: -165px -55px;
+}
+
+.history {
+    width: 32px;
+    height: 32px;
+    background-position: -69px -182px;
+}
+
+.logger {
+    width: 65px;
+    height: 56px;
+    background-position: -1px -52px;
+    margin-right: -5px;
+    margin-top: 4px;
+}
+
+.money {
+    width: 32px;
+    height: 32px;
+    background-position: -82px -135px;
+}
+
+.percent {
+    width: 32px;
+    height: 32px;
+    background-position: -116px -135px;
+}
+
+.postop {
+    width: 30px;
+    height: 50px;
+    background-position: -217px -1px;
+    margin-right: 7px;
+    margin-top: 6px;
+}
+
+.prolaps {
+    width: 80px;
+    height: 40px;
+    background-position: -83px -1px;
+}
+
+.redwood {
+    width: 80px;
+    height: 49px;
+    background-position: -1px -1px;
+}
+
+.sprunk {
+    width: 80px;
+    height: 40px;
+    background-position: -83px -43px;
+}
+
+.tag_green {
+    width: 32px;
+    height: 32px;
+    background-position: -103px -182px;
+}
+
+.tag_yellow {
+    width: 32px;
+    height: 32px;
+    background-position: -137px -182px;
+}
+
+.warning {
+    width: 32px;
+    height: 32px;
+    background-position: -169px -179px;
+}
+
+.alert {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.6; }
+}
